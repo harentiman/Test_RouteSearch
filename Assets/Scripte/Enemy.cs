@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class EnemyMoveChas_Ver2 : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
     public class firstNodePos
     {
@@ -13,20 +13,17 @@ public class EnemyMoveChas_Ver2 : MonoBehaviour
     List<firstNodePos> firstNodePosList = new List<firstNodePos>();    //初回の経由地点リスト
 
     [Header("目標地点"), SerializeField] Transform goalTransform;                           //目標地点
-    [Header("親のNodeObject"), SerializeField] GameObject nodeObject;                       //親の経由地点
+    [Header("親のNodeObject"), SerializeField] GameObject masterNodeObject;                 //親の経由地点
     [Header("エネミーの探知範囲"), SerializeField] float detectionRange = Mathf.Infinity;   //エネミーの探索範囲
     //[Header("エネミーの移動スピード"), SerializeField] float speed = 2f;                  //エネミーの移動スピード
     //[Header("目的座標の許容範囲値"), SerializeField] float tolLevPos = 0.01f;             //目的座標の許容範囲値
-
-    //Transform nextNodeTransform;      //次移動座標
 
     List<Node> shortNodeObjectList = new List<Node>(); //最短経由地点組合せリスト
     List<Node> tempNodeObjectList = new List<Node>();  //一時経由地点組合せ
     float shortNodePosDis;  //最短経由地点の座標差合計
     float tempNodePosDis;   //一時最短地点の座標差合計
+    //Transform nextNodeTransform;      //次移動座標
 
-
-    // Start is called before the first frame update
     void Start()
     {
         Node nodeObject = GetFirstNodeObject(); //初回経由地点探索処理
@@ -36,7 +33,6 @@ public class EnemyMoveChas_Ver2 : MonoBehaviour
     }
 
 
-    // Update is called once per frame
     void Update()
     {
         #region
@@ -74,13 +70,13 @@ public class EnemyMoveChas_Ver2 : MonoBehaviour
         if (Physics.Raycast(transform.position, (goalTransform.position - transform.position), out hit, detectionRange))
         {
             //親の経由地点に格納している数分、繰り返す
-            for (int i = 0; i < nodeObject.gameObject.transform.childCount; i++)
+            for (int i = 0; i < masterNodeObject.gameObject.transform.childCount; i++)
             {
                 //親の経由地点から各経由地点の座標、座標差を取得
                 firstNodePos firstPos = new firstNodePos();
 
                 //子の経由地点と経由地点差（エネミー間）を取得
-                firstPos.firstNodeObjectList = nodeObject.gameObject.transform.GetChild(i).gameObject;
+                firstPos.firstNodeObjectList = masterNodeObject.gameObject.transform.GetChild(i).gameObject;
                 firstPos.firstNodePosDisList = (Vector3.Distance(transform.position,
                                                 firstPos.firstNodeObjectList.gameObject.transform.position));
 
@@ -113,7 +109,7 @@ public class EnemyMoveChas_Ver2 : MonoBehaviour
     #endregion
 
 
-    //経由地点探索処理
+    #region //経由地点探索処理
     void GetNextNodeObject(Node nextNodeObject)
     {
         //次の座標地点に格納されている要素数分、繰り返す
@@ -176,4 +172,5 @@ public class EnemyMoveChas_Ver2 : MonoBehaviour
             GetNextNodeObject(temp);
         }
     }
+    #endregion
 }
