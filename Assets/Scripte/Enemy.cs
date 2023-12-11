@@ -5,29 +5,26 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public class firstNodePos
-    {
-        public GameObject firstNodeObjectList; //初回の各経由地点情報
-        public float firstNodePosDisList;      //初回の各経由地点の座標差
-    }
-    List<firstNodePos> firstNodePosList = new List<firstNodePos>();    //初回の経由地点リスト
+    List<Node.NodePos> firstNodePosList = new List<Node.NodePos>();    //初回の経由地点リスト
+    List<Node> shortNodeObjectList = new List<Node>(); //最短経由地点ルートリスト
+    List<Node> tempNodeObjectList = new List<Node>();  //一時経由地点ルートリスト
 
-    [Header("目標地点"), SerializeField] Transform goalTransform;                           //目標地点
-    [Header("親のNodeObject"), SerializeField] GameObject masterNodeObject;                 //親の経由地点
-    [Header("エネミーの探知範囲"), SerializeField] float detectionRange = Mathf.Infinity;   //エネミーの探索範囲
-    //[Header("エネミーの移動スピード"), SerializeField] float speed = 2f;                  //エネミーの移動スピード
-    //[Header("目的座標の許容範囲値"), SerializeField] float tolLevPos = 0.01f;             //目的座標の許容範囲値
+    [Header("目標地点"), SerializeField] Transform playerTransform;
+    [Header("親の経由地点情報"), SerializeField] GameObject masterNodeObject;
+    [Header("探知範囲"), SerializeField] float detectionRange = Mathf.Infinity;
+    //[Header("移動スピード"), SerializeField] float speed = 2f;
+    //[Header("座標の許容誤差値"), SerializeField] float tolLevPos = 0.01f;
 
-    List<Node> shortNodeObjectList = new List<Node>(); //最短経由地点組合せリスト
-    List<Node> tempNodeObjectList = new List<Node>();  //一時経由地点組合せ
-    float shortNodePosDis;  //最短経由地点の座標差合計
-    float tempNodePosDis;   //一時最短地点の座標差合計
-    //Transform nextNodeTransform;      //次移動座標
+    [Header("初回の経由地点"), HideInInspector] public Node firstNodeObject;
+    [Header("最短経由地点の座標差合計"), HideInInspector] float shortNodePosDis;
+    [Header("一時経由地点の座標差合計"), HideInInspector] float tempNodePosDis;
+    //[Header("次の移動座標"), HideInInspector] Transform nextNodeTransform;
+
 
     void Start()
     {
-        Node nodeObject = GetFirstNodeObject(); //初回経由地点探索処理
-        GetNextNodeObject(nodeObject);          //経由地点探索処理
+        firstNodeObject = GetFirstNode(); //初回経由地点探索処理
+        GetNextNode(firstNodeObject);     //経由地点ルート探索処理
 
         Debug.Log("最短経路：" + string.Join(", ", shortNodeObjectList) + shortNodePosDis);
     }
@@ -58,50 +55,50 @@ public class Enemy : MonoBehaviour
 
 
     #region //初回経由地点探索処理
-    Node GetFirstNodeObject()
+    Node GetFirstNode()
     {
-        Node fIrstNoseObject = null;  //初回経由地点情報
-        float firstNodePosDisMin = 0; //初回経由地点の最短座標差
-        int firstNodeNumMin = 0;      //初回経由地点の最小要素番号
+        Node fIrstNoseObject = null;  //経由地点情報
+        float firstNodePosDisMin = 0; //経由地点の最短座標間距離
+        int firstNodeNumMin = 0;      //経由地点の最短距離の要素番号
 
+        //目標地点にレイを飛ばし、
         RaycastHit hit;
 
-        //目標地点にレイを飛ばし、障害物がなければ目標地点を移動地点にする
-        if (Physics.Raycast(transform.position, (goalTransform.position - transform.position), out hit, detectionRange))
+        if (Physics.Raycast(transform.position, (playerTransform.position - transform.position), out hit, detectionRange))
         {
-            //親の経由地点に格納している数分、繰り返す
+            //子の経由地点数分、繰り返す
             for (int i = 0; i < masterNodeObject.gameObject.transform.childCount; i++)
             {
-                //親の経由地点から各経由地点の座標、座標差を取得
-                firstNodePos firstPos = new firstNodePos();
+                //各経由地点情報と座標間距離を取得
+                Node.NodePos tempNodePos = new Node.NodePos();
 
                 //子の経由地点と経由地点差（エネミー間）を取得
-                firstPos.firstNodeObjectList = masterNodeObject.gameObject.transform.GetChild(i).gameObject;
-                firstPos.firstNodePosDisList = (Vector3.Distance(transform.position,
-                                                firstPos.firstNodeObjectList.gameObject.transform.position));
+                tempNodePos.nodeObject = masterNodeObject.gameObject.transform.GetChild(i).gameObject;
+                tempNodePos.nodePosDis = (Vector3.Distance(transform.position,
+                                                tempNodePos.nodeObject.gameObject.transform.position));
 
-                //初回ループは座標差を必ず保持
+                //初回は必ず保持
                 if (i == 0)
                 {
-                    firstNodePosDisMin = firstPos.firstNodePosDisList;
+                    firstNodePosDisMin = tempNodePos.nodePosDis;
                     firstNodeNumMin = i;
                 }
-                //以降のループは座標差を比較し、座標差が小さい値を保持
+                //以降は座標間距離を比較、距離が短い方に更新
                 else
                 {
-                    if (firstNodePosDisMin > firstPos.firstNodePosDisList)
+                    if (firstNodePosDisMin > tempNodePos.nodePosDis)
                     {
-                        firstNodePosDisMin = firstPos.firstNodePosDisList;
+                        firstNodePosDisMin = tempNodePos.nodePosDis;
                         firstNodeNumMin = i;
                     }
                 }
 
-                firstNodePosList.Add(firstPos);
+                //座標情報、座標間距離の組合せをリストに格納
+                firstNodePosList.Add(tempNodePos);
             }
-            //firstNodePosList[firstNodeNumMin].firstNodeObjectList.SetActive(false);
 
-            //次の移動座標のNodeクラスを取得
-            fIrstNoseObject = firstNodePosList[firstNodeNumMin].firstNodeObjectList.GetComponent<Node>();
+            //目標地点から最も近い経由地点を取得
+            fIrstNoseObject = firstNodePosList[firstNodeNumMin].nodeObject.GetComponent<Node>();
         }
 
         return fIrstNoseObject;
@@ -109,8 +106,8 @@ public class Enemy : MonoBehaviour
     #endregion
 
 
-    #region //経由地点探索処理
-    void GetNextNodeObject(Node nextNodeObject)
+    #region //経由地点ルート探索処理
+    void GetNextNode(Node nextNodeObject)
     {
         //次の座標地点に格納されている要素数分、繰り返す
         for (int i = 0; i < nextNodeObject.nextNodeObjList.Count; i++)
@@ -124,7 +121,7 @@ public class Enemy : MonoBehaviour
             }
 
             //最終地点の場合、最短経路リストとの比較、更新を行う
-            if (nextNodeObject.isGoal)
+            if (nextNodeObject.isPlayer)
             {
                 //最短経路リストが空の場合、初回格納を行う
                 if (shortNodeObjectList.Count == 0)
@@ -163,13 +160,15 @@ public class Enemy : MonoBehaviour
 
             //次の移動座標を取得する
             Node temp = nextNodeObject.nextNodeObjList[i];
-            //nextNodeObject.nextNodeObjList[i].gameObject.SetActive(false);
 
             //最終地点の場合、処理を終了する
-            if (nextNodeObject.isGoal) return;
+            if (nextNodeObject.isPlayer)
+            {
+                return;
+            }
 
             //再帰関数として実行
-            GetNextNodeObject(temp);
+            GetNextNode(temp);
         }
     }
     #endregion

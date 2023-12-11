@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 432518381}
   - component: {fileID: 432518384}
   m_Layer: 0
-  m_Name: Cube_Goal
+  m_Name: Cube_Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,7 +152,7 @@ Transform:
   m_GameObject: {fileID: 432518379}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.74, y: 0.69052446, z: 4.59}
+  m_LocalPosition: {x: 5.12, y: 0.69052446, z: 4.31}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   masterNodeObject: {fileID: 1234216156}
-  goalNodeObject: {fileID: 0}
+  playerNodeObject: {fileID: 0}
 --- !u!1 &479461015
 GameObject:
   m_ObjectHideFlags: 0
@@ -493,7 +493,7 @@ MonoBehaviour:
   nextNodeObjList:
   - {fileID: 1824852430}
   - {fileID: 1051492698}
-  isGoal: 0
+  isPlayer: 0
 --- !u!135 &807591840
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -777,7 +777,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextNodeObjList:
   - {fileID: 1387487581}
-  isGoal: 0
+  isPlayer: 0
 --- !u!1 &1234216156
 GameObject:
   m_ObjectHideFlags: 0
@@ -865,7 +865,7 @@ MonoBehaviour:
   nextNodeObjList:
   - {fileID: 807591839}
   - {fileID: 2046676953}
-  isGoal: 0
+  isPlayer: 0
 --- !u!135 &1244420238
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1090,7 +1090,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextNodeObjList:
   - {fileID: 0}
-  isGoal: 1
+  isPlayer: 1
 --- !u!1 &1441000658
 GameObject:
   m_ObjectHideFlags: 0
@@ -1209,9 +1209,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcd8292f9de3b034b94d3909e59c52a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goalTransform: {fileID: 432518380}
+  playerTransform: {fileID: 432518380}
   masterNodeObject: {fileID: 1234216156}
   detectionRange: Infinity
+  firstNodeObject: {fileID: 0}
 --- !u!1 &1545320660
 GameObject:
   m_ObjectHideFlags: 0
@@ -1465,7 +1466,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextNodeObjList:
   - {fileID: 1387487581}
-  isGoal: 0
+  isPlayer: 0
 --- !u!1 &2046676952
 GameObject:
   m_ObjectHideFlags: 0
@@ -1501,7 +1502,7 @@ MonoBehaviour:
   nextNodeObjList:
   - {fileID: 1824852430}
   - {fileID: 1051492698}
-  isGoal: 0
+  isPlayer: 0
 --- !u!135 &2046676954
 SphereCollider:
   m_ObjectHideFlags: 0

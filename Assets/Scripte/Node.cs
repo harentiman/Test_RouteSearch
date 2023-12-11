@@ -5,10 +5,14 @@ using UnityEngine;
 
 public class Node : MonoBehaviour
 {
-    //経由地点情報リスト
+    public class NodePos    //経由地点クラス
+    {
+        public GameObject nodeObject; //各経由地点情報
+        public float nodePosDis;      //各経由地点の座標間距離
+    }
+
     [Header("行先ノード"), SerializeField] public List<Node> nextNodeObjList = new List<Node>();
-    //最終地点
-    [Header("最終地点"), SerializeField] public bool isGoal;
+    [Header("最終地点"), SerializeField] public bool isPlayer;
 
 
     void Reset()
