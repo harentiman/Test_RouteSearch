@@ -121,29 +121,28 @@ public class EnemyMoveChas_Ver2 : MonoBehaviour
         {
             //一時リストに座標情報と座標間距離を格納
             tempNodeObjectList.Add(nextNodeObject);
-
             if (nextNodeObject.nextNodeObjList[i] != null)
             {
                 tempNodePosDis += Vector3.Distance(nextNodeObject.transform.position,
                                                     nextNodeObject.nextNodeObjList[i].transform.position);
             }
 
-            //最終地点の場合、最短経路リスト比較・更新を行う
+            //最終地点の場合、最短経路リストとの比較、更新を行う
             if (nextNodeObject.isGoal)
             {
-                //最短経路リストの要素数が0の場合、最短経路リストに格納する
+                //最短経路リストが空の場合、初回格納を行う
                 if (shortNodeObjectList.Count == 0)
                 {
                     shortNodeObjectList.AddRange(tempNodeObjectList);
                     shortNodePosDis = tempNodePosDis;
                 }
-                //最短経路リストの要素数が0以上の場合、最短経路リストを更新する
+                //初回格納以降の場合、最短経路リストの更新を行う
                 else
                 {
                     //最短経路リストと一時リストの要素数が一致しない場合、要素数を合わせる
                     if (shortNodeObjectList.Count > tempNodeObjectList.Count)
                     {
-                        //不足している要素数を算出、不足箇所に要素番号を挿入する
+                        //不足している要素数を算出、不足箇所に要素番号を最短経路リストから挿入
                         int elementsToAdd = shortNodeObjectList.Count - tempNodeObjectList.Count;
 
                         for (int n = 0; n < elementsToAdd; n++)
@@ -151,27 +150,26 @@ public class EnemyMoveChas_Ver2 : MonoBehaviour
                             tempNodeObjectList.Insert(0, shortNodeObjectList[n]);
                         }
                     }
-                    //座標差合計の比較、更新を行う
-                    if(shortNodePosDis > tempNodePosDis)
+                    //現在の座標間距離合計の方が距離が短い場合、最短座標間距離合計を更新する
+                    if (shortNodePosDis > tempNodePosDis)
                     {
                         shortNodeObjectList.Clear();
                         shortNodeObjectList.AddRange(tempNodeObjectList);
                         shortNodePosDis = tempNodePosDis;
                     }
                 }
-                Debug.Log("経路一覧：" + string.Join(", ", tempNodeObjectList) + tempNodePosDis);
 
+                Debug.Log("経路一覧：" + string.Join(", ", tempNodeObjectList) + tempNodePosDis);
                 //一時リスト、座標間距離をクリア
                 tempNodeObjectList.Clear();
                 tempNodePosDis = 0;
             }
 
-
-            //次の移動座標を取得
+            //次の移動座標を取得する
             Node temp = nextNodeObject.nextNodeObjList[i];
             //nextNodeObject.nextNodeObjList[i].gameObject.SetActive(false);
 
-            //最終地点の場合、再帰処理を終了する
+            //最終地点の場合、処理を終了する
             if (nextNodeObject.isGoal) return;
 
             //再帰関数として実行
