@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     [Header("目標の経由地点"), HideInInspector] public Node playerNodeObject;
 
 
-    void Start()
+    private void Awake()
     {
         playerNodeObject = GetPlayerNode();
     }
@@ -24,6 +24,8 @@ public class Player : MonoBehaviour
         Node playerNodeObject = null;     //経由地点情報
         float playerNodePosDisMin = 0;    //経由地点の最短座標間距離
         int playerNodeNumMin = 0;         //経由地点の最短距離の要素番号
+
+        //前回のプレイヤーの最寄経由地点を戻す
 
         //子の経由地点数分、繰り返す
         for (int i = 0; i < masterNodeObject.gameObject.transform.childCount; i++)
@@ -57,6 +59,8 @@ public class Player : MonoBehaviour
 
         //目標地点から最も近い経由地点を取得
         playerNodeObject = playerNodePosList[playerNodeNumMin].nodeObject.GetComponent<Node>();
+        //プレイヤーの最寄経由地点を立てる
+        playerNodeObject.isPlayer = true;
 
         return playerNodeObject;
     }

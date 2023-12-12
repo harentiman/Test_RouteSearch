@@ -11,8 +11,9 @@ public class Node : MonoBehaviour
         public float nodePosDis;      //各経由地点の座標間距離
     }
 
-    [Header("行先ノード"), SerializeField] public List<Node> nextNodeObjList = new List<Node>();
-    [Header("最終地点"), SerializeField] public bool isPlayer;
+    [Header("次の行先経由地点"), SerializeField] public List<Node> nextNodeObjList = new List<Node>();
+
+    [Header("プレイヤーの最寄経由地点"), HideInInspector] public bool isPlayer;
 
 
     void Reset()
