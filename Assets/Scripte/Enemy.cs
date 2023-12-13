@@ -99,6 +99,7 @@ public class Enemy : MonoBehaviour
 
             //目標地点から最も近い経由地点を取得
             fIrstNoseObject = firstNodePosList[firstNodeNumMin].nodeObject.GetComponent<Node>();
+            Debug.Log("エネミー最寄経由地点：" + fIrstNoseObject);
         }
 
         return fIrstNoseObject;

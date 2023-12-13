@@ -61,6 +61,7 @@ public class Player : MonoBehaviour
         playerNodeObject = playerNodePosList[playerNodeNumMin].nodeObject.GetComponent<Node>();
         //プレイヤーの最寄経由地点を立てる
         playerNodeObject.isPlayer = true;
+        Debug.Log("プレイヤー最寄経由地点：" + playerNodeObject);
 
         return playerNodeObject;
     }
