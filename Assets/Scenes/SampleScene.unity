@@ -488,7 +488,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   masterNodeObject: {fileID: 1234216156}
+  processIntervalTime: 1
   playerNodeObject: {fileID: 0}
+  lastPlayerNode: {fileID: 0}
 --- !u!1 &479461015
 GameObject:
   m_ObjectHideFlags: 0
@@ -1586,7 +1588,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextNodeObjList:
   - {fileID: 0}
-  isPlayer: 0
+  isPlayer: 1
 --- !u!1 &1441000658
 GameObject:
   m_ObjectHideFlags: 0
@@ -1700,7 +1702,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1441000658}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fcd8292f9de3b034b94d3909e59c52a7, type: 3}
   m_Name: 
