@@ -21,4 +21,21 @@ public class Node : MonoBehaviour
         //経由地点情報リスト生成時、空の要素を生成する
         nextNodeObjList.Add(null);
     }
+
+
+    #region デバッグ機能
+    void OnDrawGizmos()
+    {
+        // 各、次の行先経由地点との赤線を描画
+        Gizmos.color = Color.red;
+
+        foreach (Node nextNode in nextNodeObjList)
+        {
+            if (nextNode != null)
+            {
+                Gizmos.DrawLine(transform.position, nextNode.transform.position);
+            }
+        }
+    }
+    #endregion
 }

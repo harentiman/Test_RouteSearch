@@ -54,7 +54,7 @@ public class Enemy : MonoBehaviour
     }
 
 
-    #region //初回経由地点探索処理
+    #region 初回経由地点探索処理
     Node GetFirstNode()
     {
         Node fIrstNoseObject = null;  //経由地点情報
@@ -107,7 +107,7 @@ public class Enemy : MonoBehaviour
     #endregion
 
 
-    #region //経由地点ルート探索処理
+    #region 経由地点ルート探索処理
     void GetNextNode(Node nextNodeObject)
     {
         //次の座標地点に格納されている要素数分、繰り返す
@@ -139,9 +139,9 @@ public class Enemy : MonoBehaviour
                         //不足している要素数を算出、不足箇所に要素番号を最短経路リストから挿入
                         int elementsToAdd = shortNodeObjectList.Count - tempNodeObjectList.Count;
 
-                        for (int n = 0; n < elementsToAdd; n++)
+                        for (int ii = 0; ii < elementsToAdd; ii++)
                         {
-                            tempNodeObjectList.Insert(0, shortNodeObjectList[n]);
+                            tempNodeObjectList.Insert(ii, shortNodeObjectList[ii]);
                         }
                     }
                     //現在の座標間距離合計の方が距離が短い場合、最短座標間距離合計を更新する
